@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <input type="number" v-model.number="number"/>
+        <button @click="calculate">계산하기</button>
+        <p>합 : {{sum}}</p>
+        <p v-if="error">{{error}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                number:1,
+                sum:0,
+                error:""
+            },
+            methods:{//여기 method라고 생각하기 너무 쉬움. Vue에 함수를 정의하는 태그는 methods임;
+                calculate(){
+                    if(this.number <= 0){
+                        this.error = "0 이나 음수값은 입력할 수 없습니다. ";
+                        this.sum = 0;
+                    }else{
+                        this.error="";
+                        this.sum = (this.number * (this.number + 1))/2;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

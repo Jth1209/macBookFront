@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <input type="number" v-model.number="number"/>
+        <button @click="gugudan">출력하기</button>
+        <ul>
+            <li v-for="item in gugu">{{item}}</li>
+        </ul>
+        <br>
+        <p v-if="error">{{error}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                number:1,
+                gugu:[],
+                error:""
+            },
+            methods:{//여기 method라고 생각하기 너무 쉬움. Vue에 함수를 정의하는 태그는 methods임;
+                gugudan(){
+                    if(this.number <= 0){
+                        this.error = "0 이나 음수값은 입력할 수 없습니다. ";
+                        this.gugu = [];
+                    }else{
+                        this.error="";
+                        for(let i =1; i<=9; i++){
+                            this.gugu.push(`${this.number} X ${i} = ${this.number * i}`);
+                        } 
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

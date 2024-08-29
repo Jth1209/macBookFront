@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" name="writer" placeholder="작성자">
+        <input type="text" name="title" placeholder="글 제목">
+        <input type="text" name="content" placeholder="글 내용">
+
+
+        <button onclick="createPost()">Create</button>
+        <button onclick="readPost()">Read</button>
+        <button onclick="updatePost()">Update</button>
+        <button onclick="deletePost()">Delete</button>
+    </div>
+    <ul class="print-data"></ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const apiUrl='http://localhost:4000/board';
+        var countNum = 1;//해당 id 값은 이후 게시판 정렬을 위해 사용.****
+        
+        function readPost() {
+            $.ajax({
+                url:apiUrl,
+                method:'GET',
+                success: function(data){
+                    const printData = $(".print-data");
+                    printData.empty();
+                    data.forEach(post => {
+                        printData.append(`<li>writer:${post.id} <br>title:${post.title} <br> content:${post.content} <br> regtime:${post.regtime} <br> hits:${post.hits} <br></li>`);
+                    })
+                },
+                error: function(error){
+                    console.error('ERROR:',error);
+                }
+            });
+        }
+        
+        function createPost() {//입력되는 번호 순서대로 sorting하는것도 나중에 해야함. 회원가입 기능 추가할 때 사용
+            const inputWriter = $('input[name=writer]').val();
+            const inputTitle = $('input[name=title]').val();
+            const inputContent = $('input[name=content]').val();
+            const inputRegtime = new Date().toISOString().substring(0,19);
+            const inputHits = 0;
+
+            const board={
+                id:inputWriter,
+                title:inputTitle,
+                content:inputContent,
+                regtime:inputRegtime,
+                hits:inputHits
+            };
+            
+            $.ajax({
+                url:apiUrl,
+                method:'POST',
+                contentType:'application/json',
+                data:JSON.stringify(board),
+                success: function(data){
+                    console.log(data);
+                    readPost();
+                },
+                error: function(error){
+                    console.error('Error:', error);
+                }
+            });
+        }
+        
+        function updatePost() {//회원 정보 수정
+            const inputWriter = $('input[name=writer]').val();
+            const inputTitle = $('input[name=title]').val();
+            const inputContent = $('input[name=content]').val();
+            const inputRegtime = new Date().toISOString().substring(0,19);
+            const inputHits = 0;
+
+            const board={
+                id:inputWriter,
+                title:inputTitle,
+                content:inputContent,
+                regtime:inputRegtime,
+                hits:inputHits 
+            };
+            
+            $.ajax({
+                url:`${apiUrl}/${inputWriter}`,
+                method:'PUT',
+                contentType:'application/json',
+                data:JSON.stringify(board),
+                success: function(data){
+                    console.log(data);
+                    readPost();
+                },
+                error: function(error){
+                    console.error('Error:', error);
+                }
+            });
+        }
+        
+        function deletePost() {//회원 정보 삭제
+            const inputWriter = $('input[name=writer]').val();
+
+            $.ajax({
+                url:`${apiUrl}/${inputWriter}`,
+                method:'DELETE',
+                success:function(data){
+                    console.log(data);
+                    readPost();
+                },
+                error: function(error){
+                    console.error('Error:',error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <article id="box"></article>
+    <article id="box2"></article>
+    <img id="aircraft" src="aircraft.jpg" alt="Aircraft" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px;">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const box = document.querySelector("#box");//box의 디자인 요소를 document event 내부에 선언함으로 동작을 입힘.
+            const box2 = document.querySelector("#box2");
+            const aircraft = document.getElementById('aircraft');
+           
+            let topPosition = 50;
+            let leftPosition = 50;
+
+            document.addEventListener('keydown', (event) => {
+                const step = 5; // Movement step in pixels
+
+                switch (event.key) {
+                    case 'ArrowUp':
+                        topPosition -= step;
+                        break;
+                    case 'ArrowDown':
+                        topPosition += step;
+                        break;
+                    case 'ArrowLeft':
+                        leftPosition -= step;
+                        break;
+                    case 'ArrowRight':
+                        leftPosition += step;
+                        break;
+                }
+                aircraft.style.top = `${topPosition}%`;
+                aircraft.style.left = `${leftPosition}%`;
+                aircraft.style.transform = 'translate(-50%, -50%)';
+                box.style.top = `${topPosition}%`;
+                box.style.left = `${leftPosition}%`;
+                box.style.transform = 'translate(-50%, -50%)';
+                box2.style.top = `${topPosition}%`;
+                box2.style.left = `${leftPosition}%`;
+                box2.style.transform = 'translate(-50%, -50%)';
+            });
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" name="id" placeholder="상품 번호">
+        <input type="text" name="pname" placeholder="상품 이름">
+        <input type="text" name="price" placeholder="가격">
+        <input type="text" name="stock" placeholder="재고">
+        <input type="text" name="description" placeholder="상품 설명">
+
+
+        <button onclick="createPost()">Create</button>
+        <button onclick="readPost()">Read</button>
+        <button onclick="updatePost()">Update</button>
+        <button onclick="deletePost()">Delete</button>
+    </div>
+    <ul class="print-data"></ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const apiUrl='http://localhost:4000/product';
+        var countNum = 1;//해당 id 값은 이후 게시판 정렬을 위해 사용.****
+        
+        function readPost() {
+            $.ajax({
+                url:apiUrl,
+                method:'GET',
+                success: function(data){
+                    const printData = $(".print-data");
+                    printData.empty();
+                    data.forEach(post => {
+                        printData.append(`<li>product_id:${post.id} <br>product_name:${post.product_name} <br> price:${post.price} <br> stock:${post.stock} <br> description:${post.description} <br></li>`);
+                    })
+                },
+                error: function(error){
+                    console.error('ERROR:',error);
+                }
+            });
+        }
+        
+        function createPost() {//입력되는 번호 순서대로 sorting하는것도 나중에 해야함. 회원가입 기능 추가할 때 사용
+            const inputId = $('input[name=id]').val();
+            const inputPname = $('input[name=pname]').val();
+            const inputPrice = $('input[name=price]').val();
+            const inputStock = $('input[name=stock]').val();
+            const inputDescription = $('input[name=description]').val();
+            
+
+            const product={
+                id:inputId,
+                product_name:inputPname,
+                price:inputPrice,
+                stock:inputStock,
+                description:inputDescription
+            };
+            
+            $.ajax({
+                url:apiUrl,
+                method:'POST',
+                contentType:'application/json',
+                data:JSON.stringify(product),
+                success: function(data){
+                    console.log(data);
+                    readPost();
+                },
+                error: function(error){
+                    console.error('Error:', error);
+                }
+            });
+        }
+        
+        function updatePost() {//회원 정보 수정
+            const inputId = $('input[name=id]').val();
+            const inputPname = $('input[name=pname]').val();
+            const inputPrice = $('input[name=price]').val();
+            const inputStock = $('input[name=stock]').val();
+            const inputDescription = $('input[name=description]').val();
+            
+
+            const product={
+                id:inputId,
+                product_name:inputPname,
+                price:inputPrice,
+                stock:inputStock,
+                description:inputDescription
+            };
+            
+            $.ajax({
+                url:`${apiUrl}/${inputId}`,//멱등성을 생각하면 됨.
+                method:'PUT',
+                contentType:'application/json',
+                data:JSON.stringify(product),
+                success: function(data){
+                    console.log(data);
+                    readPost();
+                },
+                error: function(error){
+                    console.error('Error:', error);
+                }
+            });
+        }
+        
+        function deletePost() {//회원 정보 삭제
+            const inputId = $('input[name=id]').val();
+
+            $.ajax({
+                url:`${apiUrl}/${inputId}`,
+                method:'DELETE',
+                success:function(data){
+                    console.log(data);
+                    readPost();
+                },
+                error: function(error){
+                    console.error('Error:',error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

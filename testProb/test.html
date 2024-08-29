@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class board{
+            constructor(num,writer,title,content,regtime,hits){
+                this.num = num;
+                this.writer = writer;
+                this.title = title;
+                this.content = content;
+                this.regtime = regtime;
+                this.hits = hits;
+            };
+            constructor(){
+
+            };
+            getNum(){
+                return this.num;
+            };
+            setNum(num){
+                this.num = num;
+            }
+        }
+        const test = `${board.setNum(10)}`;
+        console.log(test);
+    </script>
+</body>
+</html>
